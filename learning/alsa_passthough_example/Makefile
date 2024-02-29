@@ -1,7 +1,7 @@
 # Makefile for hsl, the High Score List program
 # with automatic dependency scanning
 
-PROGRAM := record+play
+PROGRAM := record+play.out
 SRCS := record+play.c
 CFLAGS := -Wall
 LIB_LINK := -lasound
