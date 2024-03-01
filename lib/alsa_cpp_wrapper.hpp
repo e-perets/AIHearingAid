@@ -9,10 +9,7 @@
 #ifndef ALSA_CPP_WRAPPER_H
 #define ALSA_CPP_WRAPPER_H
 
-#include <cstddef>
 #include <string>
-#include <vector>
-#include <memory>
 extern "C"{
   #include <alsa/asoundlib.h>
 }

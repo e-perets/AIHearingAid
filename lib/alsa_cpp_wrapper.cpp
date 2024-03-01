@@ -7,9 +7,6 @@
  */
 
 #include "alsa_cpp_wrapper.hpp"
-#include <alsa/error.h>
-#include <alsa/pcm.h>
-#include <asm-generic/errno-base.h>
 #include <iostream>
 
 Alsa::Alsa(std::string _pdevice, std::string _cdevice, unsigned int _rate,
