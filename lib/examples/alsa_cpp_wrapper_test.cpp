@@ -7,7 +7,6 @@
  */
 
 #include "../alsa_cpp_wrapper.hpp"
-#include <alsa/pcm.h>
 
 int main() {
   /* Create our object, with appropriate ALSA PCM identifiers,
@@ -17,7 +16,7 @@ int main() {
    * "arecord -l" on the terminal to find the appropriate id
    * for playback and capture. The first number in the id is the
    * card number, and the second is the device number. */
-  Alsa audio("hw:2,0", "hw:2,0", 44100, SND_PCM_ACCESS_RW_INTERLEAVED, 32);
+  Alsa audio("hw:0,0", "hw:0,0", 44100, SND_PCM_ACCESS_RW_INTERLEAVED, 32);
 
   // We can get various bits of data from the "audio" object:
   unsigned int rate = audio.getRate();
