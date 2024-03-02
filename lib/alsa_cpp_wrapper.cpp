@@ -15,28 +15,30 @@ Alsa::Alsa(std::string _pdevice, std::string _cdevice, unsigned int _rate,
   pdevice {_pdevice},
   cdevice {_cdevice},
   rate {_rate},
+  rate_actual {_rate},
   buffer_mode {_buffer_mode},
-  period_size {_period_size}
+  period_size {_period_size},
+  period_size_actual {_period_size}
 {
   int err;
-  int dir;
-  constexpr snd_pcm_uframes_t start_threshold = 0x1;
+  int dir = 0;
+  constexpr snd_pcm_uframes_t start_threshold = 0x7fffffff;
   constexpr snd_pcm_format_t format = SND_PCM_FORMAT_S16_LE;
 
   // Setup ALSA standard output
   if ((err = snd_output_stdio_attach(&output, stdout, 0)) < 0) {
       std::cout << "Output failed: " << snd_strerror(err) << std::endl;
-    }
+  }
 
   // Open PCM device for capture
   if ((err = snd_pcm_open(&chandle, cdevice.c_str(), SND_PCM_STREAM_CAPTURE, 0)) < 0) {
       std::cout << "Unable to open pcm device: " << snd_strerror(err) << std::endl;
-    }
+  }
 
   // Open PCM device for playback
   if ((err = snd_pcm_open(&phandle, pdevice.c_str(), SND_PCM_STREAM_PLAYBACK, 0)) < 0) {
       std::cout << "Unable to open pcm device: " << snd_strerror(err) << std::endl;
-    }
+  }
 
   // Allocate hardware parameter objects.
   snd_pcm_hw_params_alloca(&c_params);
@@ -60,12 +62,14 @@ Alsa::Alsa(std::string _pdevice, std::string _cdevice, unsigned int _rate,
   snd_pcm_hw_params_set_channels(phandle, p_params, 2);
 
   // Set sample rate
-  snd_pcm_hw_params_set_rate_near(chandle, c_params, &rate, &dir);
-  snd_pcm_hw_params_set_rate_near(phandle, p_params, &rate, &dir);
+  //std::cout << "rate before set = " << rate << std::endl;
+  snd_pcm_hw_params_set_rate_near(chandle, c_params, &rate_actual, &dir);
+  snd_pcm_hw_params_set_rate_near(phandle, p_params, &rate_actual, &dir);
+  //std::cout << "rate after set = " << rate << std::endl;
 
   // Set period size in frames.
-  snd_pcm_hw_params_set_period_size_near(chandle, c_params, &period_size, &dir);
-  snd_pcm_hw_params_set_period_size_near(phandle, p_params, &period_size, &dir);
+  snd_pcm_hw_params_set_period_size_near(chandle, c_params, &period_size_actual, &dir);
+  snd_pcm_hw_params_set_period_size_near(phandle, p_params, &period_size_actual, &dir);
 
   // Set buffer size to twice the period size
   buffer_size = 2 * period_size;
@@ -101,7 +105,7 @@ Alsa::Alsa(std::string _pdevice, std::string _cdevice, unsigned int _rate,
   }
 
   // Set avail min (and check actual period size obtained)
-  snd_pcm_hw_params_get_period_size(c_params, &period_size_actual, &dir);
+  //snd_pcm_hw_params_get_period_size(c_params, &period_size_actual, &dir);
   if (period_size_actual != period_size) {
     std::cout << "Warning: period size selected was not achieved for capture: ";
     std::cout << "selected " << period_size << ", but got " << period_size_actual << std::endl;
@@ -110,7 +114,7 @@ Alsa::Alsa(std::string _pdevice, std::string _cdevice, unsigned int _rate,
     std::cout << "Unable to set avail min for capture: " << snd_strerror(err) << std::endl;
   }
 
-  snd_pcm_hw_params_get_period_size(p_params, &period_size_actual, &dir);
+  //snd_pcm_hw_params_get_period_size(p_params, &period_size_actual, &dir);
   if (period_size_actual != period_size) {
     std::cout << "Warning: period size selected was not achieved for playback: ";
     std::cout << "selected " << period_size << ", but got " << period_size_actual << std::endl;
@@ -180,9 +184,20 @@ void Alsa::playbackPeriod(void) {
   }
 }
 
+void Alsa::start(void) {
+  int err;
+  if ((err = snd_pcm_start(chandle)) < 0) {
+    std::cout << "Start error: " << snd_strerror(err) << std::endl;
+  }
+}
+
 char *Alsa::getBufPtr(void) { return buffer; }
 
 size_t Alsa::getBufSize(void) { return period_size_actual_bytes; }
+
+unsigned int Alsa::getRate(void) { return rate_actual; }
+
+snd_pcm_uframes_t Alsa::getPeriodSize(void) { return period_size_actual; }
 
 Alsa::~Alsa(void) {
   snd_pcm_unlink(chandle);

@@ -45,6 +45,13 @@ public:
   void capturePeriod(void);
 
   /**
+   * @brief  Method to start the linked capture and playback PCM devices
+   * @param  None
+   * @retval None
+   */
+  void start(void);
+
+  /**
    * @brief  Method returning pointer to internal application buffer containing a period of frames
    * @param  None
    * @retval char*
@@ -57,6 +64,20 @@ public:
    * @retval size_t
    */
   size_t getBufSize(void);
+
+  /**
+   * @brief  Method returning the sample rate actually obtained
+   * @param  None
+   * @retval unsigned int
+   */
+  unsigned int getRate(void);
+
+  /**
+   * @brief  Method returning the period size in frames actually obtained
+   * @param  None
+   * @retval snd_pcm_uframes_t
+   */
+  snd_pcm_uframes_t getPeriodSize(void);
 
   /**
    * @brief  Destructor to clean up
@@ -74,13 +95,16 @@ private:
   std::string cdevice;
 
   /** Audio sample rate for playback and capture */
-  unsigned int rate;
+  const unsigned int rate;
+
+  /** Audio sample rate for playback and capture actually obtained */
+  unsigned int rate_actual;
 
   /** Buffer data mode (e.g. interlieved or non-interlieved) */
   snd_pcm_access_t buffer_mode;
 
   /** Number of frames per period */
-  snd_pcm_uframes_t period_size;
+  const snd_pcm_uframes_t period_size;
 
   /** Number of frames per period actually obtained */
   snd_pcm_uframes_t period_size_actual;
