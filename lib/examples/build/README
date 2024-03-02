@@ -1,0 +1,5 @@
+This directory is a good place to build the example program
+"alsa_cpp_wrapper_test.cpp" in the directory above, to keep
+things tidy. While in this directory, enter into the terminal:
+
+cmake .. && make
