@@ -1,0 +1,3 @@
+/Users/eperets/dst5/AIHearingAid/wavRW/CMakeFiles/wavRW.dir
+/Users/eperets/dst5/AIHearingAid/wavRW/CMakeFiles/edit_cache.dir
+/Users/eperets/dst5/AIHearingAid/wavRW/CMakeFiles/rebuild_cache.dir
