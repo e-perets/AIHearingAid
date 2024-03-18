@@ -133,12 +133,14 @@ void processOneExperiment(const int expIndex, const bool showPlots = true) {
 		
 		//A) SIGNALWITHNOISE ELECTRODE:
 		//1) ADJUST & AMPLIFY
-		const double signalWithNoise_raw = signalWithNoise_gain * signalWithNoise_raw_data;
+		const double signalWithNoise_raw = signalWithNoise_gain * (signalWithNoise_raw_data + noiseref_raw_data);
+		//const double signalWithNoise_raw = signalWithNoise_gain * signalWithNoise_raw_data;
 		double signalWithNoise_filtered = signalWithNoise_filterHP.filter(signalWithNoise_raw);
 
 		//B) NOISEREF ELECTRODE:
 		//1) ADJUST & AMPLIFY
-		const double noiseref_raw = noiseref_gain * noiseref_raw_data;
+		const double noiseref_raw = noiseref_gain * (signalWithNoise_raw_data-noiseref_raw_data);
+		//const double noiseref_raw = noiseref_gain * noiseref_raw_data;
 		const double noiserefhp = noiseref_filterHP.filter(noiseref_raw);
 
 		double f_nn = dnf.filter(signalWithNoise_filtered,noiserefhp);

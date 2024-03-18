@@ -18,6 +18,8 @@
 #include <numeric>
 #include <vector>
 
+#include <boost/circular_buffer.hpp>
+
 using namespace std;
 
 //*************************************************************************************
@@ -72,9 +74,9 @@ void Net::setLearningRate(double _w_learningRate, double _b_learningRate){
 //forward propagation of inputs:
 //*************************************************************************************
 
-void Net::setInputs(const double* _inputs, const double scale, const unsigned int offset, const int n) {
-	inputs=_inputs;
-	layers[0]->setInputs(inputs, scale, offset, n); //sets the inputs to the first layer only
+void Net::setInputs(boost::circular_buffer<double>& _inputs, const double scale, const unsigned int offset, const int n) {
+	//inputs=_inputs;
+	layers[0]->setInputs(_inputs, scale, offset, n); //sets the inputs to the first layer only
 }
 
 void Net::propInputs(){

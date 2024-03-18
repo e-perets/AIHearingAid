@@ -16,6 +16,8 @@
 #include <numeric>
 #include <vector>
 
+#include <boost/circular_buffer.hpp>
+
 #include "Layer.h"
 
 /** Net is the main class used to set up a neural network used for
@@ -70,7 +72,8 @@ public:
  * of learning, needs to be placed in an infinite loop.
  * @param _inputs A pointer to the array of inputs
  */
-	void setInputs(const double *_inputs, const double scale = 1.0, const unsigned int offset = 0, const int n = -1);
+	void setInputs(boost::circular_buffer<double> &_inputs, const double scale = 1.0, const unsigned int offset = 0, const int n = -1);
+	//void setInputs(const boost::circular_buffer<double> *_inputs, const double scale = 1.0, const unsigned int offset = 0, const int n = -1);
 /**
  * It propagates the inputs forward through the network.
  */
@@ -221,7 +224,7 @@ private:
 	/**
 	 * A pointer to the inputs of the network
 	 */
-	const double *inputs = 0;
+	const boost::circular_buffer<double> inputs;
   
 	/**
 	 * A pointer to the gradient of the error

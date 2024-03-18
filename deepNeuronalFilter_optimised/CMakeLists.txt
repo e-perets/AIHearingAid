@@ -14,9 +14,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 include(GNUInstallDirs)
 
-add_subdirectory(eeg_filter)
-add_subdirectory(eeg_sim)
-add_subdirectory(ecg_filter)
+
 add_subdirectory(audio_filter)
 add_subdirectory(cvui)
 

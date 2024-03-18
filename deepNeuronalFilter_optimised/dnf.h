@@ -32,7 +32,8 @@ public:
 			 signalDelayLineLength(noiseDelayLineLength / 2),
 			 signal_delayLine(signalDelayLineLength),
 			 nNeurons(new int[NLAYERS]),
-			 noise_delayLine(new double[noiseDelayLineLength]) {		
+			 noise_delayLine(noiseDelayLineLength){		
+		std::cout << noise_delayLine.capacity() << std::endl;
 		// calc an exp reduction of the numbers always reaching 1
 		double b = exp(log(noiseDelayLineLength)/(NLAYERS-1));
 		for(int i=0;i<NLAYERS;i++) {
@@ -67,11 +68,33 @@ public:
 	double filter(const double signal, const double noise) {
 		signal_delayLine.push_back(signal);
 		const double delayed_signal = signal_delayLine[0];
+
+		signal_delayLine.push_front(noise / (double)noiseDelayLineLength);
+
+		//noise_delayLine.pop_front();
+		//noise_delayLine.push_front(noise / (double)noiseDelayLineLength);
+
+		//double linear_noise_delayLine = noise_delayLine.linearize()
+
+		//for (int i = noiseDelayLineLength-1 ; i > 0; i--) {
+		//	noise_delayLine[i] = noise_delayLine[i-1];
+		//}
+		//noise_delayLine[0] = noise / (double)noiseDelayLineLength;
+
+
 		
-		for (int i = noiseDelayLineLength-1 ; i > 0; i--) {
-			noise_delayLine[i] = noise_delayLine[i-1];
-		}
-		noise_delayLine[0] = noise / (double)noiseDelayLineLength;
+		//pseudo code written by Gena
+		//noise_buffer = []
+		//noise_DelayLine[RingBufferPointer] = noise / (double)noiseDelayLineLength
+
+
+		//noise_buffer.splice(noise_buffer.end(), noise_delayLine, RingBufferPointer+1, noise_delayLine.end());
+		//noise_buffer.splice(noise_buffer.end(), noise_delayLine, noise_delayLine.begin(), RingBufferPointer);
+		//
+		//use noise buffer instead of noise_delayLine for calculations
+		//probably need to reinitiallise noise_buffer every time
+
+
 
 		// NOISE INPUT TO NETWORK
 		NNO->setInputs(noise_delayLine);
@@ -119,7 +142,7 @@ public:
 	 * \returns The delayed noise polluted signal sample.
 	 **/
 	inline const double getDelayedSignal() const {
-		return signal_delayLine[0];
+		return signal_delayLine.front();
 	}
 
 	/**
@@ -145,7 +168,7 @@ public:
 	~DNF() {
 		delete NNO;
 		delete[] nNeurons;
-		delete[] noise_delayLine;
+		//delete[] &noise_delayLine;
 	}
 
 private:
@@ -153,7 +176,7 @@ private:
 	int noiseDelayLineLength;
 	int signalDelayLineLength;
 	boost::circular_buffer<double> signal_delayLine;
-	double* noise_delayLine;
+	boost::circular_buffer<double> noise_delayLine;
 	int* nNeurons;
 	double remover = 0;
 	double f_nn = 0;
