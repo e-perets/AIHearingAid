@@ -66,7 +66,7 @@ public:
 	 * Sets the inputs to all neurons in the first hidden layer only
 	 * @param _inputs A pointer to an array of inputs
 	 */
-	void setInputs(boost::circular_buffer<double> &_inputs, const double scale = 1.0, const unsigned int offset = 0, const int n = -1);
+	void setInputs(const boost::circular_buffer<double>& _inputs, const double scale = 1.0, const unsigned int offset = 0, const int n = -1);
 
 	/**
 	 * Sets the inputs to all neurons in the deeper layers (excluding the first hidden layer)

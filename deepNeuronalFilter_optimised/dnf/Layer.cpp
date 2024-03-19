@@ -72,22 +72,20 @@ void Layer::setlearningRate(double _w_learningRate, double _b_learningRate){
 //forward propagation of inputs:
 //*************************************************************************************
 
-void Layer::setInputs(boost::circular_buffer<double>& _inputs, const double scale, const unsigned int offset, const int n) {
+void Layer::setInputs(const boost::circular_buffer<double>& _inputs, const double scale, const unsigned int offset, const int n) {
 	/*this is only for the first layer*/
-	//boost::circular_buffer<double> inputs = _inputs;
 	for (int j=0; j< (n < 0 ? nInputs:n); j++){
 		Neuron** neuronsp = neurons;//point to the 1st neuron
 		/* sets a temporarily pointer to neuron-pointers
 		 * within the scope of this function. this is inside
 		 * the loop, so that it is set to the first neuron
 		 * everytime a new value is distributed to neurons */
-		const double input= (_inputs[j]) * scale; //take this input value
+		const double input = _inputs[j] * scale; //take this input value
 		for (int i=0; i<nNeurons; i++){
 		  (*neuronsp)->setInput(j+(int)offset,input);
 			//set this input value for this neuron
 			neuronsp++; //point to the next neuron
 		}
-		//inputs++; //point to the next input value
 	}
 }
 
