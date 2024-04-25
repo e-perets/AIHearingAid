@@ -163,6 +163,7 @@ void processOneExperiment(const int expIndex, const bool showPlots = true) {
 		// Do LMS filter
 		if (count > (samplesNoLearning+nTapsDNF)){
 			lms_filter.setLearningRate(lms_learning_rate);
+			//cout << lms_learning_rate << endl;
 		} else {
 			lms_filter.setLearningRate(0);
 		}
@@ -261,6 +262,11 @@ int main(int argc, const char *argv[]) {
 	
 	if (strcmp(argv[1],"-a") == 0) {
 		for(int i = 0; i < nExp; i++) {
+			//lms_learning_rate = lms_learning_rate_array[i];
+			//dnf_learning_rate = dnf_learning_rate_array[i];
+			//NLAYERS = NLAYERS_array[i];
+			//nTapsDNF = nTapsDNF_array[i];
+			Neuron::actMethod ACTIVATION = ACTIVATION_array[i];
 			processOneExperiment(i+1,false);
 		}
 		return 0;
