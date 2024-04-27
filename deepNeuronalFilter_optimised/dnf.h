@@ -8,6 +8,7 @@
 #include "dnf/Neuron.h"
 #include "dnf/Layer.h"
 #include "dnf/Net.h"
+#include "audio_filter/parameters.h"
 
 /**
  * Main Deep Neuronal Network main class.
@@ -68,6 +69,7 @@ public:
 	 * \returns The filtered signal where the noise has been removed by the DNF.
 	 **/
 	double filter(const double signal, const double noise) {
+		counter_backprop++;
 		signal_delayLine.push_back(signal);
 		const double delayed_signal = signal_delayLine[0];
 
@@ -82,15 +84,17 @@ public:
 		f_nn = delayed_signal - remover;
 		
 		// FEEDBACK TO THE NETWORK 
-		NNO->setError(f_nn);
-		switch (errorPropagation) {
-		case Backprop:
-		default:
-			NNO->propErrorBackward();
-			break;
-		case ModulatedHebb:
-			NNO->propModulatedHebb(f_nn);
-			break;
+		if (counter_backprop % propErrorBackwardPeriod == 0) {
+			NNO->setError(f_nn);
+			switch (errorPropagation) {
+			case Backprop:
+			default:
+				NNO->propErrorBackward();
+				break;
+			case ModulatedHebb:
+				NNO->propModulatedHebb(f_nn);
+				break;
+			}
 		}
 		NNO->updateWeights();
 		return f_nn;
@@ -157,6 +161,7 @@ private:
 	double remover = 0;
 	double f_nn = 0;
 	ErrorPropagation errorPropagation = Backprop;
+	int counter_backprop = 0;
 };
 
 #endif

@@ -1060,6 +1060,7 @@ audio_filter/CMakeFiles/audio_filter.dir/audio_filter.cpp.o
  /home/magin/DST5_project/AIHearingAid/deepNeuronalFilter_optimised/dnf/Layer.h
  /home/magin/DST5_project/AIHearingAid/deepNeuronalFilter_optimised/dnf/Net.h
  /home/magin/DST5_project/AIHearingAid/deepNeuronalFilter_optimised/audio_filter/parameters.h
+ /home/magin/DST5_project/AIHearingAid/deepNeuronalFilter_optimised/audio_filter/parameters.h
  /home/magin/DST5_project/AIHearingAid/deepNeuronalFilter_optimised/audio_filter/dynamicPlots.h
  /usr/local/include/Fir1.h
  /usr/include/opencv4/opencv2/opencv.hpp

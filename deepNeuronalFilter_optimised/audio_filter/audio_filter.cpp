@@ -266,7 +266,8 @@ int main(int argc, const char *argv[]) {
 			//dnf_learning_rate = dnf_learning_rate_array[i];
 			//NLAYERS = NLAYERS_array[i];
 			//nTapsDNF = nTapsDNF_array[i];
-			Neuron::actMethod ACTIVATION = ACTIVATION_array[i];
+			//Neuron::actMethod ACTIVATION = ACTIVATION_array[i];
+			propErrorBackwardPeriod = propErrorBackwardPeriod_array[i];
 			processOneExperiment(i+1,false);
 		}
 		return 0;
