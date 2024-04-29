@@ -69,7 +69,7 @@ void processOneExperiment(const int expIndex, const bool showPlots = true) {
 	const std::string sd = outpPrefix + expDir + std::to_string(expIndex);
 	std::filesystem::create_directory(sd);
 	
-	DNF dnf(NLAYERS,nTapsDNF,fs,ACTIVATION);
+	DNF dnf(NLAYERS,nTapsDNF,fs,ACTIVATION,propErrorBackwardPeriod);
 
 	// FILES
 	fstream signalWithNoise_file;
@@ -223,6 +223,7 @@ void processOneExperiment(const int expIndex, const bool showPlots = true) {
 				}
 			}
 		}
+
 		count++;
 	}
 	wavread.close();

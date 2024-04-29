@@ -8,7 +8,6 @@
 #include "dnf/Neuron.h"
 #include "dnf/Layer.h"
 #include "dnf/Net.h"
-#include "audio_filter/parameters.h"
 
 /**
  * Main Deep Neuronal Network main class.
@@ -30,12 +29,14 @@ public:
 	    const int numTaps,
 	    const double fs,
 	    const Neuron::actMethod am = Neuron::Act_Tanh,
-	    const bool debugOutput = false
+	    const bool debugOutput = false,
+		int _propErrorBackwardPeriod = 2
 		) : noiseDelayLineLength(numTaps),
 		    signalDelayLineLength(noiseDelayLineLength / 2),
 		    signal_delayLine(signalDelayLineLength, 0),
 		    nNeurons(new int[NLAYERS]),
-		    noise_delayLine(noiseDelayLineLength, 0){
+		    noise_delayLine(noiseDelayLineLength, 0),
+			propErrorBackwardPeriod(_propErrorBackwardPeriod){
 
 		// calc an exp reduction of the numbers always reaching 1
 		double b = exp(log(noiseDelayLineLength)/(NLAYERS-1));
@@ -70,6 +71,7 @@ public:
 	 **/
 	double filter(const double signal, const double noise) {
 		counter_backprop++;
+		//cout<<counter_backprop<<endl;
 		signal_delayLine.push_back(signal);
 		const double delayed_signal = signal_delayLine[0];
 
@@ -85,6 +87,9 @@ public:
 		
 		// FEEDBACK TO THE NETWORK 
 		if (counter_backprop % propErrorBackwardPeriod == 0) {
+			//cout<<propErrorBackwardPeriod<<endl;
+			//cout<<"BackPropCalculate"<<endl;
+			counter_backprop = 0;
 			NNO->setError(f_nn);
 			switch (errorPropagation) {
 			case Backprop:
@@ -95,8 +100,9 @@ public:
 				NNO->propModulatedHebb(f_nn);
 				break;
 			}
+		
+			NNO->updateWeights();
 		}
-		NNO->updateWeights();
 		return f_nn;
 	}
 
@@ -161,7 +167,8 @@ private:
 	double remover = 0;
 	double f_nn = 0;
 	ErrorPropagation errorPropagation = Backprop;
-	int counter_backprop = 0;
+	unsigned int counter_backprop = 0;
+	int propErrorBackwardPeriod = 1;
 };
 
 #endif

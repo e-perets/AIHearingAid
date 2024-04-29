@@ -37,14 +37,14 @@ int NLAYERS = 3; // 5
 double lms_learning_rate = 0.05; // 0.05
 
 //how frequently error Backward propagation works
-int propErrorBackwardPeriod = 1;
+int propErrorBackwardPeriod = 5;
 
 double lms_learning_rate_array[] = {0.01, 0.025, 0.05, 0.075, 0.1};
 double dnf_learning_rate_array[] = {0.01, 0.025, 0.05, 0.075, 0.1};
 int nTapsDNF_array[] = {100, 200, 300, 400, 500};
 int NLAYERS_array[] = {1, 2, 3, 4, 5};
 Neuron::actMethod ACTIVATION_array[] = {Neuron::Act_NONE, Neuron::Act_Sigmoid, Neuron::Act_Tanh, Neuron::Act_ReLU};
-int propErrorBackwardPeriod_array[] = {1, 2, 5, 10, 20};
+unsigned int propErrorBackwardPeriod_array[] = {7, 2, 5, 10, 20};
 
 
 const double signalWithNoise_gain = 0.5; // 1
