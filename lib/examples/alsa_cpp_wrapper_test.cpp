@@ -5,10 +5,23 @@
  * @brief   Small test program showing the funtionality of the alsa_cpp_wrapper
  * library
  */
-
+#include <fir1.h>
+#include <stdio>
+#include <iostream>
+#include <stdint>
 #include "../alsa_cpp_wrapper.hpp"
 
 int main() {
+  
+  const int nTapsDNF = 200;
+  const double dnf_learning_rate = 0.05;
+
+
+  Fir1 lms_filter(nTapsDNF);
+
+  lms_filter.setLearningRate(dnf_learning_rate);
+  
+
   /* Create our object, with appropriate ALSA PCM identifiers,
    * sample rate, buffer data organization, and period size in frames.
    * The ALSA PCM identifiers will be "hw:0,0" on the pi, but will
@@ -22,17 +35,38 @@ int main() {
   unsigned int rate = audio.getRate();
   snd_pcm_uframes_t period_size = audio.getPeriodSize();
 
+  //audio is 4 bytes interleaved, first 2 are for right channel and last 2 are left channel
+
+  uint8_t right_buffer[2]; //array storing 2 bytes for right channel
+  uint8_t left_buffer[2];  //array storing 2 bytes for left channel
+  uint8_t output_buffer[4];//array for outputting
+
   // Most importantlly, we can get a pointer to the buffer storing each period of audio captured
-  char *buffer = audio.getBufPtr();
+  char *buffer = audio.getBufPtr();//buffer contains bytes
   size_t buffer_size = audio.getBufSize(); // Need to know the size of the buffer in bytes
+  
 
   audio.start(); // Start the capture and playback devices
   while (true) {
-    audio.capturePeriod(); // Capture a period
+
+	audio.capturePeriod(); // Capture a period
+	
     
     /*
      * DO FILTERING HERE!!!!
      */
+	double output_signal = 0;
+	for(size_t i = 0; i < buffer_size ;i++) {
+		
+		
+		//double input_signal = buffer[i]/pow(2,15);
+                //double ref_noise = ;
+                //double canceller = lms_filter.filter(ref_noise);
+                //output_signal = input_signal - canceller;
+                //lms_filter.lms_update(output_signal);
+
+
+
     
     audio.playbackPeriod(); // Playback the captured period
   }
