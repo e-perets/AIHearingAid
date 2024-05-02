@@ -5,21 +5,22 @@
  * @brief   Small test program showing the funtionality of the alsa_cpp_wrapper
  * library
  */
-#include <fir1.h>
-#include <stdio>
+#include <Fir1.h>
+#include <Iir.h>
+#include <stdio.h>
 #include <iostream>
-#include <stdint>
+#include <stdint.h>
 #include "../alsa_cpp_wrapper.hpp"
 
+int nTapsDNF = 200;
+double dnf_learning_rate = 0.05;
+
+
 int main() {
-  
-  const int nTapsDNF = 200;
-  const double dnf_learning_rate = 0.05;
 
+  //Fir1 lms_filter(nTapsDNF);
 
-  Fir1 lms_filter(nTapsDNF);
-
-  lms_filter.setLearningRate(dnf_learning_rate);
+  //lms_filter.setLearningRate(dnf_learning_rate);
   
 
   /* Create our object, with appropriate ALSA PCM identifiers,
@@ -29,7 +30,7 @@ int main() {
    * "arecord -l" on the terminal to find the appropriate id
    * for playback and capture. The first number in the id is the
    * card number, and the second is the device number. */
-  Alsa audio("hw:0,0", "hw:0,0", 44100, SND_PCM_ACCESS_RW_INTERLEAVED, 32);
+  Alsa audio("hw:2,0", "hw:2,0", 44100, SND_PCM_ACCESS_RW_INTERLEAVED, 32);
 
   // We can get various bits of data from the "audio" object:
   unsigned int rate = audio.getRate();
@@ -51,12 +52,12 @@ int main() {
 
 	audio.capturePeriod(); // Capture a period
 	
-    
-    /*
-     * DO FILTERING HERE!!!!
-     */
+
 	double output_signal = 0;
-	for(size_t i = 0; i < buffer_size ;i++) {
+	//for(size_t i = 0; i < buffer_size ;i++) {
+		//std::cout<<&buffer<<std::endl;
+
+	//}
 		
 		
 		//double input_signal = buffer[i]/pow(2,15);
