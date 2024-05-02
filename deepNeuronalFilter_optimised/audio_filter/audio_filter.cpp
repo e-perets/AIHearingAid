@@ -268,7 +268,7 @@ int main(int argc, const char *argv[]) {
 			//NLAYERS = NLAYERS_array[i];
 			//nTapsDNF = nTapsDNF_array[i];
 			//Neuron::actMethod ACTIVATION = ACTIVATION_array[i];
-			propErrorBackwardPeriod = propErrorBackwardPeriod_array[i];
+			//propErrorBackwardPeriod = propErrorBackwardPeriod_array[i];
 			processOneExperiment(i+1,false);
 		}
 		return 0;

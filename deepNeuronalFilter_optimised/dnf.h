@@ -30,7 +30,7 @@ public:
 	    const double fs,
 	    const Neuron::actMethod am = Neuron::Act_Tanh,
 	    const bool debugOutput = false,
-		int _propErrorBackwardPeriod = 2
+		int _propErrorBackwardPeriod = 20
 		) : noiseDelayLineLength(numTaps),
 		    signalDelayLineLength(noiseDelayLineLength / 2),
 		    signal_delayLine(signalDelayLineLength, 0),
