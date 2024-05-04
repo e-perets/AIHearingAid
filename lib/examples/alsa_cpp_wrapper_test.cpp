@@ -10,17 +10,26 @@
 #include <stdio.h>
 #include <iostream>
 #include <stdint.h>
+#include <thread>
 #include "../alsa_cpp_wrapper.hpp"
 
-int nTapsDNF = 200;
+const int nTapsDNF = 200;
 double dnf_learning_rate = 0.05;
+
+
+
 
 
 int main() {
 
-  //Fir1 lms_filter(nTapsDNF);
+  union{
+  	int32_t filterOutput;
+	unsigned char alsaOutput[sizeof(filterOutput)];
+  }bytes;       	
 
-  //lms_filter.setLearningRate(dnf_learning_rate);
+  Fir1 lms_filter(nTapsDNF);
+
+  lms_filter.setLearningRate(dnf_learning_rate);
   
 
   /* Create our object, with appropriate ALSA PCM identifiers,
@@ -30,7 +39,7 @@ int main() {
    * "arecord -l" on the terminal to find the appropriate id
    * for playback and capture. The first number in the id is the
    * card number, and the second is the device number. */
-  Alsa audio("hw:2,0", "hw:2,0", 44100, SND_PCM_ACCESS_RW_INTERLEAVED, 32);
+  Alsa audio("hw:2,0", "hw:2,0", 44100, SND_PCM_ACCESS_RW_INTERLEAVED, 256);
 
   // We can get various bits of data from the "audio" object:
   unsigned int rate = audio.getRate();
@@ -47,25 +56,33 @@ int main() {
   size_t buffer_size = audio.getBufSize(); // Need to know the size of the buffer in bytes
   
 
+
   audio.start(); // Start the capture and playback devices
+  //std::thread thread(&Alsa::captureLoop, &audio);
   while (true) {
+  	//std::cout <<"before capturePeriod"<<std::endl;	
 
 	audio.capturePeriod(); // Capture a period
-	
 
-	double output_signal = 0;
-	//for(size_t i = 0; i < buffer_size ;i++) {
-		//std::cout<<&buffer<<std::endl;
+	for(size_t i = 0; i < audio.getPeriodSize()/4; i++){
+		double input_signal = (buffer[i*4]<<8|buffer[i*4+1])/pow(2,15);
+		double ref_noise = (buffer[i*4+2]<<8|buffer[i*4+3])/pow(2,15);
+		double canceller = lms_filter.filter(ref_noise);
+		double output_signal = input_signal - canceller;
+		lms_filter.lms_update(output_signal);
+		int32_t audioOutput = output_signal*pow(2,15);
+	//	bytes.filterOutput = audioOutput;
+	//	for(int k = 0; k < sizeof(int32_t); k++){
+	//		continue;
+			//std::cout<<(int) bytes.alsaOutput[k];
+			//std::cout<<", ";
+			//buffer[i*4 + k] = bytes.alsaOutput[k];
+	//	}
+		//std::cout<<""<<std::endl;
 
-	//}
-		
-		
-		//double input_signal = buffer[i]/pow(2,15);
-                //double ref_noise = ;
-                //double canceller = lms_filter.filter(ref_noise);
-                //output_signal = input_signal - canceller;
-                //lms_filter.lms_update(output_signal);
-
+		//	std::cout<<(int) buffer[i];
+		//	std::cout<<", ";
+	}
 
 
     

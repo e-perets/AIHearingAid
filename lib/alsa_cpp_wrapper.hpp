@@ -80,11 +80,22 @@ public:
   snd_pcm_uframes_t getPeriodSize(void);
 
   /**
+   * @brief Method for starting a capture loop (intended for threads) 
+   * @param None
+   * @retval None
+   */
+  void captureLoop();
+
+  /**
    * @brief  Destructor to clean up
    */
   ~Alsa(void);
 
 private:
+
+  /** Boolean for starting and stopping capture loop */
+  bool running;
+
   /** Application buffer containing one period of frames */
   char *buffer = NULL;
 

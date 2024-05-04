@@ -12,6 +12,7 @@
 Alsa::Alsa(std::string _pdevice, std::string _cdevice, unsigned int _rate,
            snd_pcm_access_t _buffer_mode, snd_pcm_uframes_t _period_size)
   :
+  //running(true),
   pdevice {_pdevice},
   cdevice {_cdevice},
   rate {_rate},
@@ -199,6 +200,14 @@ unsigned int Alsa::getRate(void) { return rate_actual; }
 
 snd_pcm_uframes_t Alsa::getPeriodSize(void) { return period_size_actual; }
 
+//Capture loop for running in a thread
+void Alsa::captureLoop(){
+	while(true){
+		Alsa::capturePeriod();
+	}
+}
+
+
 Alsa::~Alsa(void) {
   snd_pcm_unlink(chandle);
   snd_pcm_hw_free(chandle);
@@ -210,3 +219,5 @@ Alsa::~Alsa(void) {
   snd_output_close(output);
   free(buffer);
 }
+
+
