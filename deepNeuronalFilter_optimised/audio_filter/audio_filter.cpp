@@ -269,6 +269,8 @@ int main(int argc, const char *argv[]) {
 			//nTapsDNF = nTapsDNF_array[i];
 			//Neuron::actMethod ACTIVATION = ACTIVATION_array[i];
 			//propErrorBackwardPeriod = propErrorBackwardPeriod_array[i];
+			audioPath = audioPath_array[i];
+			cout<<audioPath<<endl;
 			processOneExperiment(i+1,false);
 		}
 		return 0;

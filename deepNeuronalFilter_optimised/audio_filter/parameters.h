@@ -7,14 +7,14 @@ const double fs = 44100; // 48000
 
 const float start_time_ignore = 0; // sec
 
-const char* const audioPath = "audio/exp%d/S1m_N90deg1m_44100_32bit_drill.wav";
+const char* audioPath = "audio/exp%d/S1m_N90deg1m_44100_32bit_drill.wav";
 
 Neuron::actMethod ACTIVATION = Neuron::Act_NONE;
 
 int RingBufferPointer = 0;
 
 // number of experiments
-const int nExp = 5; // 2
+const int nExp = 4; // 2
 
 // pre-filtering
 const int filterorder = 2;
@@ -45,6 +45,7 @@ int nTapsDNF_array[] = {100, 200, 300, 400, 500};
 int NLAYERS_array[] = {1, 2, 3, 4, 5};
 Neuron::actMethod ACTIVATION_array[] = {Neuron::Act_NONE, Neuron::Act_Sigmoid, Neuron::Act_Tanh, Neuron::Act_ReLU};
 unsigned int propErrorBackwardPeriod_array[] = {1, 2, 5, 10, 20};
+const char* audioPath_array[] = {"audio/exp%d/S1m_N90deg1m_44100_32bit_drill.wav", "audio/exp%d/S1m_N60deg1m_44100_32bit_drill.wav", "audio/exp%d/S1m_N30deg1m_44100_32bit_drill.wav", "audio/exp%d/S1m_Behind1m_44100_32bit_drill.wav"};
 
 
 const double signalWithNoise_gain = 0.5; // 1
