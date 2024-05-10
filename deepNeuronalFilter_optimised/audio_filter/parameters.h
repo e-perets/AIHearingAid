@@ -14,7 +14,7 @@ Neuron::actMethod ACTIVATION = Neuron::Act_NONE;
 int RingBufferPointer = 0;
 
 // number of experiments
-const int nExp = 4; // 2
+const int nExp = 5; // 2
 
 // pre-filtering
 const int filterorder = 2;

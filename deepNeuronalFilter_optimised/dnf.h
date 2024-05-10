@@ -75,7 +75,8 @@ public:
 		signal_delayLine.push_back(signal);
 		const double delayed_signal = signal_delayLine[0];
 
-		noise_delayLine.push_front(noise / (double)noiseDelayLineLength);
+		noise_delayLine.push_front(noise);
+		// (double)noiseDelayLineLength);
 
 		// NOISE INPUT TO NETWORK
 		NNO->setInputs(noise_delayLine);
