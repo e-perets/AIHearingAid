@@ -28,7 +28,7 @@ const int bufferLength = 1000; // 1000
 int nTapsDNF = 300; //int(fs / noiserefHighpassCutOff) * 3; // 300
 
 // dnf learning rate
-double dnf_learning_rate = 0.05; // 1
+double dnf_learning_rate = 0.01; // 0.01
 
 // dnf number of layers
 int NLAYERS = 3; // 5
@@ -40,7 +40,7 @@ double lms_learning_rate = 0.05; // 0.05
 int propErrorBackwardPeriod = 1;
 
 double lms_learning_rate_array[] = {0.01, 0.025, 0.05, 0.075, 0.1};
-double dnf_learning_rate_array[] = {0.01, 0.025, 0.05, 0.075, 0.1};
+double dnf_learning_rate_array[] = {0.0025, 0.005, 0.01, 0.025, 0.05};
 int nTapsDNF_array[] = {100, 200, 300, 400, 500};
 int NLAYERS_array[] = {1, 2, 3, 4, 5};
 Neuron::actMethod ACTIVATION_array[] = {Neuron::Act_NONE, Neuron::Act_Sigmoid, Neuron::Act_Tanh, Neuron::Act_ReLU};

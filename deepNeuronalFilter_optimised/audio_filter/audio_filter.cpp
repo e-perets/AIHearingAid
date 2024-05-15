@@ -262,6 +262,7 @@ int main(int argc, const char *argv[]) {
 	}
 	
 	if (strcmp(argv[1],"-a") == 0) {
+		//Neuron::actMethod ACTIVATION = Neuron::Act_ReLU;
 		for(int i = 0; i < nExp; i++) {
 			//lms_learning_rate = lms_learning_rate_array[i];
 			//dnf_learning_rate = dnf_learning_rate_array[i];
